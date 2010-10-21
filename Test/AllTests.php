@@ -1,10 +1,5 @@
 <?php /** @package AddressStandardizationSolution_Test */
 
-/**
- * Gather the PHPUnit Framework
- */
-require_once 'PHPUnit/Framework.php';
-
 /**#@+
  * Gather the test files in this directory
  */
