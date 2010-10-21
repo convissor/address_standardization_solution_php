@@ -1228,7 +1228,7 @@ class AddressStandardizationSolution {
 	 *
 	 * @link http://pe.usps.gov/cpim/ftp/pubs/Pub28/pub28.pdf
 	 */
-    public function AddressLineStandardization($address) {
+	public function AddressLineStandardization($address) {
 		if (empty($address)) {
 			return '';
 		}
@@ -1543,52 +1543,52 @@ class AddressStandardizationSolution {
 
 		ksort($out);
 		return implode(' ', $out);
-    }
+	}
 
-    /**
-     * Implement abbreviations for words at the ends of certain address lines
-     *
-     * @param string $string  the address fragments to be analyzed
+	/**
+	 * Implement abbreviations for words at the ends of certain address lines
 	 *
-     * @return string  the cleaned up string
-     */
-    private function getEolAbbr($string) {
-        $suff = 0;
-        $id = 0;
+	 * @param string $string  the address fragments to be analyzed
+	 *
+	 * @return string  the cleaned up string
+	 */
+	private function getEolAbbr($string) {
+		$suff = 0;
+		$id = 0;
 
-        $parts = explode(' ', $string);
-        $count = count($parts) - 1;
+		$parts = explode(' ', $string);
+		$count = count($parts) - 1;
 
-        for ($counter = $count; $counter > -1; $counter--) {
-            if (isset($this->suffixes[$parts[$counter]])) {
-                if (!$suff) {
-                    $out[$counter] = $this->suffixes[$parts[$counter]];
-                    $suff++;
-                    if ($counter == $count) {
-                        $id = 1;
-                    }
-                } else {
-                    $out[$counter] = $parts[$counter];
-                }
+		for ($counter = $count; $counter > -1; $counter--) {
+			if (isset($this->suffixes[$parts[$counter]])) {
+				if (!$suff) {
+					$out[$counter] = $this->suffixes[$parts[$counter]];
+					$suff++;
+					if ($counter == $count) {
+						$id = 1;
+					}
+				} else {
+					$out[$counter] = $parts[$counter];
+				}
 
-            } elseif (isset($this->identifiers[$parts[$counter]])) {
-                $out[$counter] = $this->identifiers[$parts[$counter]];
-                $id = 1;
+			} elseif (isset($this->identifiers[$parts[$counter]])) {
+				$out[$counter] = $this->identifiers[$parts[$counter]];
+				$id = 1;
 
-            } elseif (isset($this->directionals[$parts[$counter]])) {
-                $out[$counter] = $this->directionals[$parts[$counter]];
-                if ($counter == $count) {
-                    $id = 1;
-                }
+			} elseif (isset($this->directionals[$parts[$counter]])) {
+				$out[$counter] = $this->directionals[$parts[$counter]];
+				if ($counter == $count) {
+					$id = 1;
+				}
 
-            } else {
-                $out[$counter] = $parts[$counter];
-            }
-        }
+			} else {
+				$out[$counter] = $parts[$counter];
+			}
+		}
 
-        ksort($out);
-        return implode(' ', $out);
-    }
+		ksort($out);
+		return implode(' ', $out);
+	}
 
 	/**
 	 * Generates a XHTML option list of states
