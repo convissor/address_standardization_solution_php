@@ -27,6 +27,7 @@ class PropertiesTest extends PHPUnit_Framework_TestCase {
 		$this->a = new AddressStandardizationSolution;
 	}
 
+
 	public function testDirectionalsReverseLookup() {
 		foreach ($this->a->directionals as $key => $value) {
 			if (substr($key, -2) == '-R') {
