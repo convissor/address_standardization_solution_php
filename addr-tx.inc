@@ -947,7 +947,7 @@ class AddressStandardizationSolution {
 		'RANCHES' => 'RNCH',
 		'RNCH' => 'RNCH',
 		'RNCHS' => 'RNCH',
-		'RAOD' => 'ROAD',
+		'RAOD' => 'RD',
 		'ROW' => 'ROW',
 		'ROW-R' => 'ROW',
 		'RAPID' => 'RPD',

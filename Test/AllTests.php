@@ -4,6 +4,7 @@
  * Gather the test files in this directory
  */
 require_once $GLOBALS['dir'] . '/AddressLineStandardizationTest.php';
+require_once $GLOBALS['dir'] . '/PropertiesTest.php';
 /**#@-*/
 
 
@@ -19,6 +20,7 @@ class AllTests {
 		$suite = new PHPUnit_Framework_TestSuite('Address Standardization Solution Unit Tests');
 
 		$suite->addTestSuite('AddressLineStandardizationTest');
+		$suite->addTestSuite('PropertiesTest');
 
 		return $suite;
 	}
