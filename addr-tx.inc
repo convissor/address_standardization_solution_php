@@ -1278,6 +1278,10 @@ class AddressStandardizationSolution {
 
 		$address = trim($address);
 
+		if (!$address) {
+			return '';
+		}
+
 		// Convert numeric words to integers.
 		$parts = explode(' ', $address);
 		foreach ($parts as $key => $val) {
