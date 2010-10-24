@@ -1300,11 +1300,11 @@ class AddressStandardizationSolution {
 		 * Check for special addresses.
 		 */
 
-		$rural_regex = 'RR|RFD ROUTE|RURAL ROUTE|RURAL RTE|RURAL RT|RURAL DELIVERY|RD ROUTE|RD RTE|RD RT';
-		if (preg_match('@^(' . $rural_regex . ')( ?)([0-9]+)([A-Z #]+)([0-9A-Z]+)(.*)$@', $address, $atom)) {
+		$rural_alternatives = 'RR|RFD ROUTE|RURAL ROUTE|RURAL RTE|RURAL RT|RURAL DELIVERY|RD ROUTE|RD RTE|RD RT';
+		if (preg_match('@^(' . $rural_alternatives . ')( ?)([0-9]+)([A-Z #]+)([0-9A-Z]+)(.*)$@', $address, $atom)) {
 			return "RR $atom[3] BOX $atom[5]";
 		}
-		if (preg_match('@^(BOX|BX)([ #]*)([0-9A-Z]+)( )(' . $rural_regex . ')( ?)([0-9]+)(.*)$@', $address, $atom)) {
+		if (preg_match('@^(BOX|BX)([ #]*)([0-9A-Z]+)( )(' . $rural_alternatives . ')( ?)([0-9]+)(.*)$@', $address, $atom)) {
 			return "RR $atom[7] BOX $atom[3]";
 		}
 
@@ -1312,8 +1312,8 @@ class AddressStandardizationSolution {
 			return "PO BOX $atom[11]";
 		}
 
-		$highway_regex = 'HIGHWAY|HIGHWY|HIWAY|HIWY|HWAY|HWY|HYGHWAY|HYWAY|HYWY';
-		if (preg_match('@^([0-9A-Z.-]+ ?[0-9/]* ?)(.*)( CNTY| COUNTY)( )(' . $highway_regex . ')( NO | # | )?([0-9A-Z]+)(.*)$@', $address, $atom)) {
+		$highway_alternatives = 'HIGHWAY|HIGHWY|HIWAY|HIWY|HWAY|HWY|HYGHWAY|HYWAY|HYWY';
+		if (preg_match('@^([0-9A-Z.-]+ ?[0-9/]* ?)(.*)( CNTY| COUNTY)( )(' . $highway_alternatives . ')( NO | # | )?([0-9A-Z]+)(.*)$@', $address, $atom)) {
 			if (isset($this->states[$atom[2]])) {
 				$atom[2] = $this->states[$atom[2]];
 			}
@@ -1361,12 +1361,12 @@ class AddressStandardizationSolution {
 			return "$atom[1]$atom[2] STATE ROUTE $atom[7]" . $this->getEolAbbr($atom[8]);
 		}
 
-		if (preg_match('@^([0-9A-Z.-]+ [0-9/]* ?)(INTERSTATE|INTRST|INT|I)( ?)(' . $highway_regex . '|H)?( ?)([0-9]+)(.*)$@', $address, $atom)) {
+		if (preg_match('@^([0-9A-Z.-]+ [0-9/]* ?)(INTERSTATE|INTRST|INT|I)( ?)(' . $highway_alternatives . '|H)?( ?)([0-9]+)(.*)$@', $address, $atom)) {
 			$atom[7] = str_replace(' BYP ', ' BYPASS ', $atom[7]);
 			return "$atom[1]INTERSTATE $atom[6]" . $this->getEolAbbr($atom[7]);
 		}
 
-		if (preg_match('@^([0-9A-Z.-]+ ?[0-9/]* ?)(.*)( STATE| ST)( )(' . $highway_regex . ')( NO | # | )?([0-9A-Z]+)(.*)$@', $address, $atom)) {
+		if (preg_match('@^([0-9A-Z.-]+ ?[0-9/]* ?)(.*)( STATE| ST)( )(' . $highway_alternatives . ')( NO | # | )?([0-9A-Z]+)(.*)$@', $address, $atom)) {
 			if (isset($this->states[$atom[2]])) {
 				$atom[2] = $this->states[$atom[2]];
 			}
@@ -1378,7 +1378,7 @@ class AddressStandardizationSolution {
 			return "$atom[1]$atom[2] STATE HIGHWAY $atom[7]" . $this->getEolAbbr($atom[8]);
 		}
 
-		if (preg_match('@^([0-9A-Z.-]+ ?[0-9/]* ?)(.*)( US| U S|UNITED STATES)( )(' . $highway_regex . ')( NO | # | )?([0-9A-Z]+)(.*)$@', $address, $atom)) {
+		if (preg_match('@^([0-9A-Z.-]+ ?[0-9/]* ?)(.*)( US| U S|UNITED STATES)( )(' . $highway_alternatives . ')( NO | # | )?([0-9A-Z]+)(.*)$@', $address, $atom)) {
 			if (isset($this->states[$atom[2]])) {
 				$atom[2] = $this->states[$atom[2]];
 			}
@@ -1390,7 +1390,7 @@ class AddressStandardizationSolution {
 			return "$atom[1]$atom[2] US HIGHWAY $atom[7]" . $this->getEolAbbr($atom[8]);
 		}
 
-		if (preg_match('@^((' . $highway_regex . '|H)\s?(CONTRACT|C)|STAR)\s?(ROUTE|RTE|RT|R)?( NO | # | )?([0-9]+)\s?([A-Z]+)(.*)$@', $address, $atom)) {
+		if (preg_match('@^((' . $highway_alternatives . '|H)\s?(CONTRACT|C)|STAR)\s?(ROUTE|RTE|RT|R)?( NO | # | )?([0-9]+)\s?([A-Z]+)(.*)$@', $address, $atom)) {
 			return "HC $atom[6] BOX" . $this->getEolAbbr($atom[8]);
 		}
 
