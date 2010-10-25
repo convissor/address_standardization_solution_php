@@ -1301,11 +1301,11 @@ class AddressStandardizationSolution {
 		 */
 
 		$rural_alternatives = 'RR|RFD ROUTE|RURAL ROUTE|RURAL RTE|RURAL RT|RURAL DELIVERY|RD ROUTE|RD RTE|RD RT';
-		if (preg_match('@^(' . $rural_alternatives . ')( ?)([0-9]+)([A-Z #]+)([0-9A-Z]+)(.*)$@', $address, $atom)) {
-			return "RR $atom[3] BOX $atom[5]";
+		if (preg_match('@^(' . $rural_alternatives . ') ?([0-9]+)([A-Z #]+)([0-9A-Z]+)(.*)$@', $address, $atom)) {
+			return "RR $atom[2] BOX $atom[4]";
 		}
-		if (preg_match('@^(BOX|BX)([ #]*)([0-9A-Z]+)( )(' . $rural_alternatives . ')( ?)([0-9]+)(.*)$@', $address, $atom)) {
-			return "RR $atom[7] BOX $atom[3]";
+		if (preg_match('@^(BOX|BX)([ #]*)([0-9A-Z]+) (' . $rural_alternatives . ') ?([0-9]+)(.*)$@', $address, $atom)) {
+			return "RR $atom[5] BOX $atom[3]";
 		}
 
 		if (preg_match('@^((((POST|P) ?(OFFICE|O) ?)?(BOX|BX|B) |(POST|P) ?(OFFICE|O) ?)|FIRM CALLER|CALLER|BIN|LOCKBOX|DRAWER)( ?(# )*)([0-9A-Z-]+)(.*)$@', $address, $atom)) {
@@ -1313,84 +1313,84 @@ class AddressStandardizationSolution {
 		}
 
 		$highway_alternatives = 'HIGHWAY|HIGHWY|HIWAY|HIWY|HWAY|HWY|HYGHWAY|HYWAY|HYWY';
-		if (preg_match('@^([0-9A-Z.-]+ ?[0-9/]* ?)(.*)( CNTY| COUNTY)( )(' . $highway_alternatives . ')( NO | # | )?([0-9A-Z]+)(.*)$@', $address, $atom)) {
+		if (preg_match('@^([0-9A-Z.-]+ ?[0-9/]* ?)(.*)( CNTY| COUNTY) (' . $highway_alternatives . ')( NO | # | )?([0-9A-Z]+)(.*)$@', $address, $atom)) {
+			if (isset($this->states[$atom[2]])) {
+				$atom[2] = $this->states[$atom[2]];
+			}
+			if (isset($this->identifiers[$atom[6]])) {
+				$atom[6] = $this->identifiers[$atom[6]];
+				$atom[7] = str_replace(' #', '', $atom[7]);
+				return "$atom[1]$atom[2] COUNTY HWY $atom[6]$atom[7]";
+			}
+			return "$atom[1]$atom[2] COUNTY HIGHWAY $atom[6]" . $this->getEolAbbr($atom[7]);
+		}
+
+		if (preg_match('@^([0-9A-Z.-]+ ?[0-9/]* ?)(.*)( CR |( CNTY| COUNTY) (ROAD|RD))( NO | # | )?([0-9A-Z]+)(.*)$@', $address, $atom)) {
 			if (isset($this->states[$atom[2]])) {
 				$atom[2] = $this->states[$atom[2]];
 			}
 			if (isset($this->identifiers[$atom[7]])) {
 				$atom[7] = $this->identifiers[$atom[7]];
 				$atom[8] = str_replace(' #', '', $atom[8]);
-				return "$atom[1]$atom[2] COUNTY HWY $atom[7]$atom[8]";
+				return "$atom[1]$atom[2] COUNTY RD $atom[7]$atom[8]";
 			}
-			return "$atom[1]$atom[2] COUNTY HIGHWAY $atom[7]" . $this->getEolAbbr($atom[8]);
+			return "$atom[1]$atom[2] COUNTY ROAD $atom[7]" . $this->getEolAbbr($atom[8]);
 		}
 
-		if (preg_match('@^([0-9A-Z.-]+ ?[0-9/]* ?)(.*)( CR |( CNTY| COUNTY)( )(ROAD|RD))( NO | # | )?([0-9A-Z]+)(.*)$@', $address, $atom)) {
-			if (isset($this->states[$atom[2]])) {
-				$atom[2] = $this->states[$atom[2]];
-			}
-			if (isset($this->identifiers[$atom[8]])) {
-				$atom[8] = $this->identifiers[$atom[8]];
-				$atom[9] = str_replace(' #', '', $atom[9]);
-				return "$atom[1]$atom[2] COUNTY RD $atom[8]$atom[9]";
-			}
-			return "$atom[1]$atom[2] COUNTY ROAD $atom[8]" . $this->getEolAbbr($atom[9]);
-		}
-
-		if (preg_match('@^([0-9A-Z.-]+ ?[0-9/]* ?)(.*)( SR|( STATE| ST)( )(ROAD|RD))( NO | # | )?([0-9A-Z]+)(.*)$@', $address, $atom)) {
-			if (isset($this->states[$atom[2]])) {
-				$atom[2] = $this->states[$atom[2]];
-			}
-			if (isset($this->identifiers[$atom[8]])) {
-				$atom[8] = $this->identifiers[$atom[8]];
-				$atom[9] = str_replace(' #', '', $atom[9]);
-				return "$atom[1]$atom[2] STATE RD $atom[8]$atom[9]";
-			}
-			return "$atom[1]$atom[2] STATE ROAD $atom[8]" . $this->getEolAbbr($atom[9]);
-		}
-
-		if (preg_match('@^([0-9A-Z.-]+ ?[0-9/]* ?)(.*)( STATE| ST)( )(ROUTE|RTE|RT)( NO | # | )?([0-9A-Z]+)(.*)$@', $address, $atom)) {
+		if (preg_match('@^([0-9A-Z.-]+ ?[0-9/]* ?)(.*)( SR|( STATE| ST) (ROAD|RD))( NO | # | )?([0-9A-Z]+)(.*)$@', $address, $atom)) {
 			if (isset($this->states[$atom[2]])) {
 				$atom[2] = $this->states[$atom[2]];
 			}
 			if (isset($this->identifiers[$atom[7]])) {
 				$atom[7] = $this->identifiers[$atom[7]];
 				$atom[8] = str_replace(' #', '', $atom[8]);
-				return "$atom[1]$atom[2] STATE RTE $atom[7]$atom[8]";
+				return "$atom[1]$atom[2] STATE RD $atom[7]$atom[8]";
 			}
-			return "$atom[1]$atom[2] STATE ROUTE $atom[7]" . $this->getEolAbbr($atom[8]);
+			return "$atom[1]$atom[2] STATE ROAD $atom[7]" . $this->getEolAbbr($atom[8]);
 		}
 
-		if (preg_match('@^([0-9A-Z.-]+ [0-9/]* ?)(INTERSTATE|INTRST|INT|I)( ?)(' . $highway_alternatives . '|H)?( ?)([0-9]+)(.*)$@', $address, $atom)) {
-			$atom[7] = str_replace(' BYP ', ' BYPASS ', $atom[7]);
-			return "$atom[1]INTERSTATE $atom[6]" . $this->getEolAbbr($atom[7]);
-		}
-
-		if (preg_match('@^([0-9A-Z.-]+ ?[0-9/]* ?)(.*)( STATE| ST)( )(' . $highway_alternatives . ')( NO | # | )?([0-9A-Z]+)(.*)$@', $address, $atom)) {
+		if (preg_match('@^([0-9A-Z.-]+ ?[0-9/]* ?)(.*)( STATE| ST) (ROUTE|RTE|RT)( NO | # | )?([0-9A-Z]+)(.*)$@', $address, $atom)) {
 			if (isset($this->states[$atom[2]])) {
 				$atom[2] = $this->states[$atom[2]];
 			}
-			if (isset($this->identifiers[$atom[7]])) {
-				$atom[7] = $this->identifiers[$atom[7]];
-				$atom[8] = str_replace(' #', '', $atom[8]);
-				return "$atom[1]$atom[2] STATE HWY $atom[7]$atom[8]";
+			if (isset($this->identifiers[$atom[6]])) {
+				$atom[6] = $this->identifiers[$atom[6]];
+				$atom[7] = str_replace(' #', '', $atom[7]);
+				return "$atom[1]$atom[2] STATE RTE $atom[6]$atom[7]";
 			}
-			return "$atom[1]$atom[2] STATE HIGHWAY $atom[7]" . $this->getEolAbbr($atom[8]);
+			return "$atom[1]$atom[2] STATE ROUTE $atom[6]" . $this->getEolAbbr($atom[7]);
 		}
 
-		if (preg_match('@^([0-9A-Z.-]+ ?[0-9/]* ?)(.*)( US| U S|UNITED STATES)( )(' . $highway_alternatives . ')( NO | # | )?([0-9A-Z]+)(.*)$@', $address, $atom)) {
+		if (preg_match('@^([0-9A-Z.-]+ [0-9/]* ?)(INTERSTATE|INTRST|INT|I) ?(' . $highway_alternatives . '|H)? ?([0-9]+)(.*)$@', $address, $atom)) {
+			$atom[5] = str_replace(' BYP ', ' BYPASS ', $atom[5]);
+			return "$atom[1]INTERSTATE $atom[4]" . $this->getEolAbbr($atom[5]);
+		}
+
+		if (preg_match('@^([0-9A-Z.-]+ ?[0-9/]* ?)(.*)( STATE| ST) (' . $highway_alternatives . ')( NO | # | )?([0-9A-Z]+)(.*)$@', $address, $atom)) {
 			if (isset($this->states[$atom[2]])) {
 				$atom[2] = $this->states[$atom[2]];
 			}
-			if (isset($this->identifiers[$atom[7]])) {
-				$atom[7] = $this->identifiers[$atom[7]];
-				$atom[8] = str_replace(' #', '', $atom[8]);
-				return "$atom[1]$atom[2] US HWY $atom[7]$atom[8]";
+			if (isset($this->identifiers[$atom[6]])) {
+				$atom[6] = $this->identifiers[$atom[6]];
+				$atom[7] = str_replace(' #', '', $atom[7]);
+				return "$atom[1]$atom[2] STATE HWY $atom[6]$atom[7]";
 			}
-			return "$atom[1]$atom[2] US HIGHWAY $atom[7]" . $this->getEolAbbr($atom[8]);
+			return "$atom[1]$atom[2] STATE HIGHWAY $atom[6]" . $this->getEolAbbr($atom[7]);
 		}
 
-		if (preg_match('@^((' . $highway_alternatives . '|H)\s?(CONTRACT|C)|STAR)\s?(ROUTE|RTE|RT|R)?( NO | # | )?([0-9]+)\s?([A-Z]+)(.*)$@', $address, $atom)) {
+		if (preg_match('@^([0-9A-Z.-]+ ?[0-9/]* ?)(.*)( US| U S|UNITED STATES) (' . $highway_alternatives . ')( NO | # | )?([0-9A-Z]+)(.*)$@', $address, $atom)) {
+			if (isset($this->states[$atom[2]])) {
+				$atom[2] = $this->states[$atom[2]];
+			}
+			if (isset($this->identifiers[$atom[6]])) {
+				$atom[6] = $this->identifiers[$atom[6]];
+				$atom[7] = str_replace(' #', '', $atom[7]);
+				return "$atom[1]$atom[2] US HWY $atom[6]$atom[7]";
+			}
+			return "$atom[1]$atom[2] US HIGHWAY $atom[6]" . $this->getEolAbbr($atom[7]);
+		}
+
+		if (preg_match('@^((' . $highway_alternatives . '|H) ?(CONTRACT|C)|STAR) ?(ROUTE|RTE|RT|R)?( NO | # | )?([0-9]+) ?([A-Z]+)(.*)$@', $address, $atom)) {
 			return "HC $atom[6] BOX" . $this->getEolAbbr($atom[8]);
 		}
 
@@ -1403,7 +1403,7 @@ class AddressStandardizationSolution {
 			return "$atom[1]RANCH ROAD $atom[5]" . $this->getEolAbbr($atom[6]);
 		}
 
-		$address = preg_replace('@^([0-9A-Z.-]+)( )([0-9][/][0-9])@', '\\1%\\3', $address);
+		$address = preg_replace('@^([0-9A-Z.-]+) ([0-9][/][0-9])@', '\\1%\\2', $address);
 
 		if (preg_match('@^([0-9A-Z/%.-]+ )(ROAD|RD)([A-Z #]+)([0-9A-Z]+)(.*)$@', $address, $atom)) {
 			$atom[1] = str_replace('%', ' ', $atom[1]);
@@ -1415,14 +1415,14 @@ class AddressStandardizationSolution {
 			return "$atom[1]ROUTE $atom[4]" . $this->getEolAbbr($atom[5]);
 		}
 
-		if (preg_match('@^([0-9A-Z/%.-]+ )(AVENUE|AVENU|AVNUE|AVEN|AVN|AVE|AV)( )([A-Z]+)(.*)$@', $address, $atom)) {
+		if (preg_match('@^([0-9A-Z/%.-]+ )(AVENUE|AVENU|AVNUE|AVEN|AVN|AVE|AV) ([A-Z]+)(.*)$@', $address, $atom)) {
 			$atom[1] = str_replace('%', ' ', $atom[1]);
-			return "$atom[1]AVENUE $atom[4]" . $this->getEolAbbr($atom[5]);
+			return "$atom[1]AVENUE $atom[3]" . $this->getEolAbbr($atom[4]);
 		}
 
-		if (preg_match('@^([0-9A-Z/%.-]+ )(BOULEVARD|BOULV|BOUL|BLVD)( )([A-Z]+)(.*)$@', $address, $atom)) {
+		if (preg_match('@^([0-9A-Z/%.-]+ )(BOULEVARD|BOULV|BOUL|BLVD) ([A-Z]+)(.*)$@', $address, $atom)) {
 			$atom[1] = str_replace('%', ' ', $atom[1]);
-			return "$atom[1]BOULEVARD " . $this->getEolAbbr("$atom[4]$atom[5]");
+			return "$atom[1]BOULEVARD " . $this->getEolAbbr("$atom[3]$atom[4]");
 		}
 
 
