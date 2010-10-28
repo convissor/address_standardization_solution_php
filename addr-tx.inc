@@ -146,7 +146,7 @@ class AddressStandardizationSolution {
 	);
 
 	/**
-	 * An array with numeric words as keys and integers as values
+	 * An array with numeric words as keys and numbers as values
 	 * @var array
 	 */
 	public $numbers = array(
