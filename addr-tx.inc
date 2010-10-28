@@ -1486,7 +1486,7 @@ class AddressStandardizationSolution {
 			} elseif (isset($this->directionals[$parts[$counter]])) {
 				$prior = $counter - 1;
 				$next = $counter + 1;
-				if (!empty($parts[$next])
+				if ($count >= $next
 					&& isset($this->suffixes[$parts[$next]]))
 				{
 					$out[$counter] = $this->directionals[$parts[$counter]];
