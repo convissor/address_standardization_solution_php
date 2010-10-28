@@ -14,26 +14,26 @@ require_once $GLOBALS['dir'] . '/../addr-tx.inc';
  * @package AddressStandardizationSolution_Test
  */
 class AddressLineStandardizationTest extends PHPUnit_Framework_TestCase {
-    /**
-     * @var AddressStandardizationSolution
-     */
+	/**
+	 * @var AddressStandardizationSolution
+	 */
 	protected $a;
 
 
-    /**
-     * PHPUnit's method for setting needed properties, etc
-     */
+	/**
+	 * PHPUnit's method for setting needed properties, etc
+	 */
 	protected function setUp() {
 		$this->a = new AddressStandardizationSolution;
 	}
 
-    /**
-     * Runs the given address through the AddressLineStandardization method
-     *
-     * @param string $address  the address to standardize
-     *
-     * @return string  the standardized address
-     */
+	/**
+	 * Runs the given address through the AddressLineStandardization method
+	 *
+	 * @param string $address  the address to standardize
+	 *
+	 * @return string  the standardized address
+	 */
 	protected function t($address) {
 		return $this->a->AddressLineStandardization($address);
 	}

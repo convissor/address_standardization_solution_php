@@ -14,15 +14,15 @@ require_once $GLOBALS['dir'] . '/../addr-tx.inc';
  * @package AddressStandardizationSolution_Test
  */
 class PropertiesTest extends PHPUnit_Framework_TestCase {
-    /**
-     * @var AddressStandardizationSolution
-     */
+	/**
+	 * @var AddressStandardizationSolution
+	 */
 	protected $a;
 
 
-    /**
-     * PHPUnit's method for setting needed properties, etc
-     */
+	/**
+	 * PHPUnit's method for setting needed properties, etc
+	 */
 	protected function setUp() {
 		$this->a = new AddressStandardizationSolution;
 	}
