@@ -27,46 +27,37 @@ class PropertiesTest extends PHPUnit_Framework_TestCase {
 		$this->a = new AddressStandardizationSolution;
 	}
 
-
-	public function testDirectionalsReverseLookup() {
-		foreach ($this->a->directionals as $key => $value) {
+	/**
+	 * Helper function that examines the given properties
+	 *
+	 * @param array $property  the array to test
+	 *
+	 * @return void
+	 */
+	protected function t($property) {
+		foreach ($property as $key => $value) {
 			if (substr($key, -2) == '-R') {
-				$this->assertArrayHasKey($value, $this->a->directionals,
+				$this->assertArrayHasKey($value, $property,
 						"value of reverse key $key is missing");
-				$this->assertEquals($this->a->directionals[$value], substr($key, 0, -2),
+				$this->assertEquals($property[$value], substr($key, 0, -2),
 						"mapping back of $key does not match $value");
 			} else {
-				$this->assertArrayHasKey("$value-R", $this->a->directionals,
+				$this->assertArrayHasKey("$value-R", $property,
 						"value of $key should map to a reverse key");
 			}
 		}
+	}
+
+
+	public function testDirectionalsReverseLookup() {
+		$this->t($this->a->directionals);
 	}
 
 	public function testIdentifiersReverseLookup() {
-		foreach ($this->a->identifiers as $key => $value) {
-			if (substr($key, -2) == '-R') {
-				$this->assertArrayHasKey($value, $this->a->identifiers,
-						"value of reverse key $key is missing");
-				$this->assertEquals($this->a->identifiers[$value], substr($key, 0, -2),
-						"mapping back of $key does not match $value");
-			} else {
-				$this->assertArrayHasKey("$value-R", $this->a->identifiers,
-						"value of $key should map to a reverse key");
-			}
-		}
+		$this->t($this->a->identifiers);
 	}
 
 	public function testSuffixesReverseLookup() {
-		foreach ($this->a->suffixes as $key => $value) {
-			if (substr($key, -2) == '-R') {
-				$this->assertArrayHasKey($value, $this->a->suffixes,
-						"value of reverse key $key is missing");
-				$this->assertEquals($this->a->suffixes[$value], substr($key, 0, -2),
-						"mapping back of $key does not match $value");
-			} else {
-				$this->assertArrayHasKey("$value-R", $this->a->suffixes,
-						"value of $key should map to a reverse key");
-			}
-		}
+		$this->t($this->a->suffixes);
 	}
 }
