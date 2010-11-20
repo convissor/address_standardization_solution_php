@@ -1,12 +1,6 @@
 <?php /** @package AddressStandardizationSolution_Test */
 
 /**
- * Gather the class these tests work on
- */
-require_once $GLOBALS['dir'] . '/../addr-tx.inc';
-
-
-/**
  * Tests properties in the AddressStandardizationSolution class
  *
  * Usage:  phpunit Properties

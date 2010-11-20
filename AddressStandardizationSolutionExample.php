@@ -2,19 +2,22 @@
 
 /**
  * Address Standardization Solution, PHP Edition,
- * AddressLineStandardization() Usage Example.
+ * AddressLineStandardization() Usage Example
  *
  * @package AddressStandardizationSolution
  * @author Daniel Convissor <danielc@analysisandsolutions.com>
- * @copyright The Analysis and Solutions Company, 2001-2006
- * @version $Name: gitmove $ $Id: addr-tx_ex-standard.php,v 5.5 2010-10-15 18:22:51 danielc Exp $
+ * @copyright The Analysis and Solutions Company, 2001-2010
  * @link http://www.analysisandsolutions.com/software/addr/addr.htm
  */
 
 /**
- * Require the main file.
+ * Require the auto loader
+ *
+ * Use dirname(__FILE__) because "./" can be stripped by PHP's safety
+ * settings and __DIR__ was introduced in PHP 5.3.
  */
-require './addr-tx.inc';
+require dirname(__FILE__) . '/autoload.php';
+
 $Address = new AddressStandardizationSolution;
 
 ?>

@@ -1,13 +1,5 @@
 <?php /** @package AddressStandardizationSolution_Test */
 
-/**#@+
- * Gather the test files in this directory
- */
-require_once $GLOBALS['dir'] . '/AddressLineStandardizationTest.php';
-require_once $GLOBALS['dir'] . '/PropertiesTest.php';
-/**#@-*/
-
-
 /**
  * Runs all Address Standardization Solution tests
  *
